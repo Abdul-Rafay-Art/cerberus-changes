@@ -50,7 +50,14 @@ class InspectionWorkflowTest extends TestCase
         $this->actingAs($staff)->get(route('staff.inspections.show', $inspection))
             ->assertOk()
             ->assertSee('class="check-status " style="--rating-color:#e1c93f"', false)
-            ->assertSee("status.style.setProperty('--rating-color',ratingColor||'#879195')", false);
+            ->assertSee("status.style.setProperty('--rating-color',ratingColor||'#879195')", false)
+            ->assertSee('Inspector Customer')
+            ->assertSee('customer@example.test')
+            ->assertSee('07123456789')
+            ->assertSee('AB12 CDE')
+            ->assertSee('Fixture · GBP 10.00')
+            ->assertSee('Not provided')
+            ->assertSee('In progress');
     }
 
     public function test_stale_autosave_version_is_rejected_instead_of_overwriting_a_newer_response(): void
@@ -94,6 +101,8 @@ class InspectionWorkflowTest extends TestCase
 
         $completeChecklistPage = $this->actingAs($staff)->get(route('staff.inspections.show', $inspection));
         $completeChecklistPage->assertOk()->assertSee('Inspection photos');
+        $completeChecklistPage->assertSee("pageUrl.searchParams.set('section'", false)
+            ->assertSee('new URLSearchParams(window.location.search)', false);
         $this->assertDoesNotMatchRegularExpression('/<section class="evidence" id="evidence"\s+hidden\s*>/', $completeChecklistPage->getContent());
         $this->assertDoesNotMatchRegularExpression('/<form[^>]+id="complete-form"[^>]+hidden\s*>/', $completeChecklistPage->getContent());
     }

@@ -114,7 +114,7 @@ class LocalDemoCatalogueSeeder extends Seeder
             $goldPackageId = DB::table('packages')->where('code', 'gold')->value('id');
             $goldFeatureId = DB::table('inspection_features')->where('code', 'gold-full-inspection')->value('id');
             DB::table('packages')->where('id', $goldPackageId)->update([
-                'name' => 'Cerberus Gold Pre-Purchase Vehicle Inspection',
+                'name' => 'Gold',
                 'description' => 'Full pre-purchase vehicle inspection based on the approved Cerberus Gold checklist.',
                 'base_price' => '249.00',
                 'active' => true,

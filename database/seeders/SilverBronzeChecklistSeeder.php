@@ -11,7 +11,7 @@ class SilverBronzeChecklistSeeder extends Seeder
     {
         $catalogues = [
             'silver' => [
-                'name' => 'Cerberus Silver Pre-Purchase Vehicle Inspection',
+                'name' => 'Silver',
                 'description' => 'Silver pre-purchase vehicle inspection checklist.',
                 'base_price' => '170.00',
                 'sort_order' => 2,
@@ -153,7 +153,7 @@ class SilverBronzeChecklistSeeder extends Seeder
                 ],
             ],
             'bronze' => [
-                'name' => 'Cerberus Bronze Pre-Purchase Vehicle Inspection',
+                'name' => 'Bronze',
                 'description' => 'Bronze pre-purchase vehicle inspection checklist.',
                 'base_price' => '120.00',
                 'sort_order' => 3,

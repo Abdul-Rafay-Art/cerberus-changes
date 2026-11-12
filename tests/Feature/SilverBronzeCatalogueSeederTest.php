@@ -22,6 +22,8 @@ class SilverBronzeCatalogueSeederTest extends TestCase
 
         $this->assertSame('170.00', $silver->base_price);
         $this->assertSame('120.00', $bronze->base_price);
+        $this->assertSame('Silver', $silver->name);
+        $this->assertSame('Bronze', $bronze->name);
         $this->assertFalse($silver->active);
         $this->assertFalse($bronze->active);
         $this->assertTrue($silverPrompts->contains('Rear-seat folding and locking'));

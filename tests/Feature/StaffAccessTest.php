@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Booking;
 use App\Models\Customer;
+use App\Models\Inspection;
 use App\Models\Package;
 use App\Models\StaffUser;
 use App\Models\Vehicle;
@@ -87,6 +88,28 @@ class StaffAccessTest extends TestCase
             ->assertOk()->assertSee('CER-REQUESTED-VISIBLE')->assertSee('CER-CANCELLED-HIDDEN')
             ->assertSee('Cancelled')
             ->assertSee(route('staff.bookings.index', ['status' => 'cancelled']), false);
+    }
+
+    public function test_clicking_a_completed_booking_with_inspection_opens_its_checklist(): void
+    {
+        $staff = StaffUser::query()->create(['email' => 'completed-link-staff@example.test', 'display_name' => 'Staff', 'password' => 'correct horse battery staple', 'role' => 'staff', 'active' => true]);
+        $customer = Customer::query()->create(['full_name' => 'Completed Link Customer', 'email' => 'completed-link@example.test', 'phone' => '07000000000']);
+        $vehicle = Vehicle::query()->create(['customer_id' => $customer->id, 'registration' => 'DONE123']);
+        $package = Package::query()->create(['code' => 'completed-link-package', 'name' => 'Completed Link Package', 'base_price' => 10, 'currency' => 'GBP', 'active' => true]);
+        $booking = Booking::query()->create([
+            'booking_reference' => 'CER-COMPLETED-LINK', 'customer_id' => $customer->id, 'vehicle_id' => $vehicle->id,
+            'package_id' => $package->id, 'status' => 'completed', 'quoted_total' => 10, 'currency' => 'GBP',
+        ]);
+        $inspection = Inspection::query()->create([
+            'booking_id' => $booking->id, 'status' => 'completed', 'started_at' => now()->subHour(), 'completed_at' => now(),
+            'package_snapshot' => ['code' => 'completed-link-package', 'name' => 'Completed Link Package'],
+            'feature_snapshot' => [], 'rating_scheme_snapshot' => [],
+        ]);
+
+        $this->actingAs($staff)->get(route('staff.bookings.index'))
+            ->assertOk()
+            ->assertSee('href="'.route('staff.inspections.show', $inspection).'"', false)
+            ->assertDontSee('href="'.route('staff.bookings.show', $booking).'"', false);
     }
 
     public function test_staff_can_export_filtered_bookings_as_csv_without_formula_injection(): void

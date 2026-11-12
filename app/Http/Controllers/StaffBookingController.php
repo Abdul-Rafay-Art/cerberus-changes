@@ -111,7 +111,7 @@ class StaffBookingController
         $search = trim($request->string('q')->toString());
 
         $bookings = Booking::query()
-            ->with(['customer:id,full_name,email,phone', 'vehicle:id,registration,make,model', 'package:id,name'])
+            ->with(['customer:id,full_name,email,phone', 'vehicle:id,registration,make,model', 'package:id,name', 'inspection:id,booking_id'])
             ->when(in_array($status, ['requested', 'confirmed', 'in_progress', 'completed', 'cancelled'], true), fn ($query) => $query->where('status', $status))
             ->when($search !== '', function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
@@ -261,7 +261,7 @@ class StaffBookingController
     {
         $validated = $request->validate([
             'status' => ['nullable', Rule::in(['requested', 'confirmed', 'in_progress', 'completed', 'cancelled'])],
-            'appointment_at' => ['nullable', 'date', Rule::when($request->input('status') === 'confirmed', ['after:now'])],
+            'appointment_at' => ['nullable', Rule::prohibitedIf($booking->status === 'in_progress'), 'date', Rule::when($request->input('status') === 'confirmed', ['after:now'])],
             'staff_notes' => ['nullable', 'string', 'max:10000'],
         ]);
 

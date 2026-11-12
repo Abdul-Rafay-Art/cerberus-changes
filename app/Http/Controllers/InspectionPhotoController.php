@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inspection;
 use App\Models\InspectionPhoto;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -59,17 +60,20 @@ class InspectionPhotoController
     {
         abort_unless($photo->inspection->status === 'in_progress', 409, 'Evidence can only be changed during an active inspection.');
         Storage::disk('local')->delete($photo->storage_key);
-        $inspectionId = $photo->inspection_id;
         $photo->delete();
 
-        return redirect()->route('staff.inspections.show', $inspectionId)->with('status', 'Photo removed.');
+        return back()->with('status', 'Photo removed.');
     }
 
-    public function update(Request $request, InspectionPhoto $photo): RedirectResponse
+    public function update(Request $request, InspectionPhoto $photo): RedirectResponse|JsonResponse
     {
         abort_unless($photo->inspection->status === 'in_progress', 409, 'Evidence can only be changed during an active inspection.');
         $validated = $request->validate(['caption' => ['nullable', 'string', 'max:500']]);
         $photo->update(['caption' => $validated['caption'] ?? null]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['caption' => $photo->caption]);
+        }
 
         return back()->with('status', 'Photo caption updated.');
     }

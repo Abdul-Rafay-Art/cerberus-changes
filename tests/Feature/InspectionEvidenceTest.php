@@ -34,6 +34,22 @@ class InspectionEvidenceTest extends TestCase
         $this->actingAs($staff)->get(route('staff.inspection-photos.show', $photo))->assertOk()->assertHeader('X-Content-Type-Options', 'nosniff');
         $this->put(route('staff.inspection-photos.update', $photo), ['caption' => 'Revised front wing view'])->assertRedirect();
         $this->assertSame('Revised front wing view', $photo->fresh()->caption);
+        $this->putJson(route('staff.inspection-photos.update', $photo), ['caption' => 'Auto-saved caption'])
+            ->assertOk()
+            ->assertJsonPath('caption', 'Auto-saved caption');
+        $this->actingAs($staff)->get(route('staff.inspections.show', $inspection))
+            ->assertOk()
+            ->assertSee('data-caption-edit', false)
+            ->assertSee('data-caption-input', false)
+            ->assertDontSee('Save caption')
+            ->assertDontSee('onsubmit="return confirm', false)
+            ->assertDontSee('Remove this inspection photo');
+
+        $inspectionUrl = route('staff.inspections.show', ['inspection' => $inspection, 'section' => 18]);
+        $this->actingAs($staff)->from($inspectionUrl)
+            ->delete(route('staff.inspection-photos.destroy', $photo))
+            ->assertRedirect($inspectionUrl);
+        $this->assertFalse(Storage::disk('local')->exists($photo->storage_key));
 
         $this->actingAs($staff)->post(route('staff.inspections.photos.store', $inspection), [
             'photos' => [UploadedFile::fake()->create('not-an-image.txt', 12, 'text/plain')],
