@@ -1,0 +1,214 @@
+<!doctype html>
+@include('staff.partials.sidebar')
+<style>.nav>a:first-child:before{content:"";display:inline-block;width:34px;height:34px;background:url('{{ asset('images/cerberus-logo.jpg') }}') center/contain no-repeat;border-radius:50%;vertical-align:middle;margin-right:8px}</style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>Inspection · {{ $inspection->booking->booking_reference }}</title>
+<style>:root{--ink:#1a252a;--navy:#182329;--gold:#c3a25c;--paper:#f4f1e8;--muted:#687176;--line:#e5e0d4}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,sans-serif}.nav{position:sticky;top:0;z-index:3;background:var(--navy);color:white;padding:13px max(18px,calc((100vw - 1100px)/2));display:flex;justify-content:space-between;align-items:center}.nav a{color:#eee;text-decoration:none}.shell{max-width:1100px;margin:auto;padding:27px 18px 80px}.summary{background:white;border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.summary strong{font-size:16px}.muted{color:var(--muted)}.progress{color:#756238;font-weight:750}.tools{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tools a{background:white;border:1px solid var(--line);border-radius:20px;padding:7px 11px;color:var(--ink);text-decoration:none;font-size:12px}.status{position:sticky;top:58px;z-index:2;background:#edf0eb;border-radius:7px;padding:9px 12px;margin:12px 0;font-size:12px}.status.error{background:#fff0ea;color:#873a2e}.status.saved{background:#eaf4eb;color:#266743}.section{scroll-margin-top:105px}.section h2{font-size:19px;margin:25px 0 10px}.check{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px;margin:10px 0;box-shadow:0 3px 14px #17222907}.check h3{font-size:16px;margin:0 0 13px}.ratings{display:flex;gap:7px;flex-wrap:wrap}.rating{position:relative}.rating input{position:absolute;opacity:0;width:1px;height:1px}.rating label{display:block;border:1px solid #d8d8d3;border-radius:20px;padding:7px 11px;background:#fff;cursor:pointer;font-size:12px;font-weight:750}.rating input:checked+label{background:var(--rating-color);border-color:var(--rating-color);color:#182329;box-shadow:0 0 0 2px #18232922}.rating input:focus-visible+label{outline:3px solid #182329;outline-offset:2px}.inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.field textarea{width:100%;min-height:76px;padding:10px;border:1px solid #ccd1cf;border-radius:7px;font:inherit;resize:vertical}.retry{display:none;margin-top:8px;border:1px solid #9c4a3d;background:white;color:#80352b;border-radius:5px;padding:6px 9px;cursor:pointer}.complete{background:var(--navy);color:white;border:0;border-radius:7px;padding:13px 18px;font:inherit;font-weight:800;cursor:pointer;margin-top:18px}.message{background:#eaf4eb;padding:12px;border-radius:7px;margin:12px 0}.error-message{background:#fff0ea;color:#873a2e;padding:12px;border-radius:7px;margin:12px 0}.footer{margin-top:30px;color:var(--muted);font-size:12px}@media(max-width:650px){.shell{padding:18px 12px 55px}.inputs{grid-template-columns:1fr}.check{padding:14px}.rating label{padding:8px 9px}.nav{font-size:12px}}</style></head>
+<style>.evidence{margin-top:30px;background:white;border:1px solid var(--line);border-radius:10px;padding:18px}.upload{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.upload label{display:block;font-weight:700;font-size:12px;margin-bottom:5px}.upload input{border:1px solid #ccd1cf;border-radius:7px;padding:8px;max-width:100%}.upload button,.photo button{background:var(--navy);color:white;border:0;border-radius:6px;padding:9px 12px;font:inherit;cursor:pointer}.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-top:16px}.photo{border:1px solid var(--line);border-radius:8px;overflow:hidden}.photo img{width:100%;height:145px;object-fit:cover;display:block;background:#e9e7df}.photo p{padding:0 10px;font-size:12px;overflow-wrap:anywhere}.photo form{padding:0 10px 10px}.photo button{padding:6px 9px;font-size:11px}.caption-edit{display:block;padding:8px 10px!important}.caption-edit input{width:100%;padding:7px;border:1px solid var(--line);border-radius:5px;margin-bottom:6px}</style>
+ <style>.inspection-icon-defs{position:absolute;width:0;height:0;overflow:hidden}.breadcrumb{position:relative;top:-8px;max-width:1100px;margin:0 auto;padding:24px 18px 10px;color:var(--muted);font-size:12px;line-height:18px}.breadcrumb a{color:#756238;text-decoration:none}.breadcrumb a:hover{text-decoration:underline}.breadcrumb-separator{padding:0 8px;color:#a6aaa8}#global-status{position:sticky;top:12px;z-index:5}.section-pager{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:900px;margin:14px auto;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:9px}.section-pager button{border:1px solid #c9d1dc;border-radius:6px;background:#fff;color:var(--ink);padding:8px 13px;font:inherit;font-size:12px;font-weight:750;cursor:pointer}.section-pager button:hover:not(:disabled){border-color:var(--gold);background:#faf7ee}.section-pager button:disabled{opacity:.45;cursor:not-allowed}.section-pager__label{color:var(--muted);font-size:12px;font-weight:750}@media(max-width:650px){.breadcrumb{padding-top:16px;top:-5px}.section-pager{margin-left:0;margin-right:0}}</style>
+ <body><svg class="inspection-icon-defs" aria-hidden="true"><defs>
+     <symbol id="inspection-icon-cabin" viewBox="0 0 24 24"><path d="M4 14h16M6 14l1-5h10l1 5M4 14v4m16-4v4M7 18h2m6 0h2"/><path d="M9 9V6h6v3"/></symbol>
+     <symbol id="inspection-icon-electrical" viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6z"/></symbol>
+     <symbol id="inspection-icon-body" viewBox="0 0 24 24"><path d="m4 13 2-6h12l2 6M3 13h18v5H3zM6 18v2m12-2v2M6 13h.01m12 0h.01"/></symbol>
+     <symbol id="inspection-icon-tyre" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="m12 4v5m0 6v5M4 12h5m6 0h5"/></symbol>
+     <symbol id="inspection-icon-engine" viewBox="0 0 24 24"><path d="M5 10h3l2-3h5l2 3h3v8H5zM3 12H1v4h4m12-2h3m-9-7V4h3v3"/><circle cx="10" cy="14" r="2"/></symbol>
+     <symbol id="inspection-icon-cooling" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M12 3l-2 2m2-2 2 2m0 14-2 2m2-2 2-2M4.2 7.5h3m-3 0 1 3m14.4 6h-3m3 0-1-3m-14.4 0 1-3m14.4 0h-3"/></symbol>
+     <symbol id="inspection-icon-fuel" viewBox="0 0 24 24"><path d="M6 21V4h9v17M6 8h9m3 13V7l3 3v5h-3"/><path d="M8 4V2h5v2"/></symbol>
+     <symbol id="inspection-icon-battery" viewBox="0 0 24 24"><rect x="3" y="6" width="17" height="12" rx="2"/><path d="M20 10h2v4h-2M8 9v6m-3-3h6m5-3v6"/></symbol>
+     <symbol id="inspection-icon-suspension" viewBox="0 0 24 24"><path d="M7 3v18m10-18v18M4 7h6M14 7h6M4 17h6m4 0h6"/><path d="m9 4 6 4-6 4 6 4-6 4"/></symbol>
+     <symbol id="inspection-icon-brake" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4v5m8 3h-5m-3 8v-5m-8-3h5"/><path d="M18 5 21 2"/></symbol>
+     <symbol id="inspection-icon-transmission" viewBox="0 0 24 24"><path d="M5 4v16m7-16v16m7-16v16M5 8h14M5 16h14"/><circle cx="5" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="19" cy="4" r="2"/></symbol>
+     <symbol id="inspection-icon-underside" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18M6 4v16m12-16v16"/></symbol>
+     <symbol id="inspection-icon-exhaust" viewBox="0 0 24 24"><path d="M3 17h8a4 4 0 0 0 4-4V7h4a2 2 0 0 1 2 2v8"/><path d="M18 5c0-2 2-2 2-4M21 6c0-2 2-2 2-4"/></symbol>
+     <symbol id="inspection-icon-road" viewBox="0 0 24 24"><path d="M4 21 9 3m6 0 5 18M12 5v3m0 4v3m0 4v2"/></symbol>
+     <symbol id="inspection-icon-diagnostics" viewBox="0 0 24 24"><path d="M12 3 22 21H2z"/><path d="M12 9v5m0 3v.01"/></symbol>
+     <symbol id="inspection-icon-checklist" viewBox="0 0 24 24"><path d="M7 3h10v18H7zM9 7h6M9 11h6M9 15h6"/><path d="m3 7 1 1 2-2m-3 6 1 1 2-2m-3 6 1 1 2-2"/></symbol>
+ </defs></svg><header class="nav"><a href="{{ route('staff.bookings.show', $inspection->booking) }}">← {{ $inspection->booking->booking_reference }}</a><strong>{{ $inspection->package_snapshot['name'] ?? $inspection->booking->package->name }} inspection</strong><span>{{ str_replace('_',' ', ucfirst($inspection->status)) }}</span></header>
+ <nav class="breadcrumb" aria-label="Breadcrumb"><a href="{{ route('staff.bookings.index') }}">Bookings</a><span class="breadcrumb-separator">/</span><a href="{{ route('staff.bookings.show', $inspection->booking) }}">{{ $inspection->booking->booking_reference }}</a><span class="breadcrumb-separator">/</span><span>Inspection</span></nav>
+<main class="shell"><div class="summary"><div><strong>{{ $inspection->booking->vehicle->registration }} · {{ trim(($inspection->booking->vehicle->make ?? '').' '.($inspection->booking->vehicle->model ?? '')) }}</strong><div class="muted">{{ $inspection->booking->customer->full_name }} · Started {{ $inspection->started_at?->format('d M Y, H:i') }}</div></div><div class="progress"><span id="answered-count">0</span> / {{ $inspection->checks->count() }} rated</div></div>
+    <div class="status" id="global-status" role="status" aria-live="polite">Ready · edits save automatically while online.</div>
+      @if (session('status') && ! session('inspection_completed'))<div class="message">{{ session('status') }}</div>@endif
+    @if ($errors->any())<div class="error-message" role="alert">{{ $errors->first() }}</div>@endif
+    @foreach ($sections as $sectionTitle => $checks)@php($sectionIcon = match (strtolower($sectionTitle)) { 'interior and comfort' => 'cabin', 'electrical systems and controls' => 'electrical', 'bodywork and exterior' => 'body', 'wheel and tyres', 'wheels and tyres' => 'tyre', 'engine compartment' => 'engine', 'cooling system' => 'cooling', 'fuel system' => 'fuel', 'battery starting and charging', 'battery, starting and charging' => 'battery', 'cold start checks' => 'engine', 'front suspension and steering', 'rear suspension' => 'suspension', 'braking system' => 'brake', 'clutch and transmission' => 'transmission', 'underside condition' => 'underside', 'exhaust and emissions system' => 'exhaust', 'road test' => 'road', 'warning lights and diagnostics' => 'diagnostics', 'post road test checks' => 'checklist', default => 'checklist' })<section class="section checklist-section" id="section-{{ $loop->index }}"><div class="section-heading"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#inspection-icon-{{ $sectionIcon }}"></use></svg></span><h2>{{ $sectionTitle }}</h2><span class="section-count">{{ $checks->count() }} {{ Str::plural('item', $checks->count()) }}</span></div><div class="section-table-head"><span>#</span><span>Inspection item</span><span>Status</span><span></span></div>
+        @foreach ($checks as $check)@php($selectedRating = $ratingScheme->firstWhere('code', $check->rating_code))<article class="check" data-check-id="{{ $check->id }}" data-version="{{ $check->version }}" data-url="{{ route('staff.inspection-checks.update', $check) }}">
+            <div class="check-header"><span class="check-number">{{ $loop->iteration }}</span><h3>{{ $check->question_text_snapshot }}</h3><span class="check-status {{ $selectedRating ? '' : 'unrated' }}"><span class="check-status-dot"></span>{{ $selectedRating['label'] ?? 'Not inspected' }}</span><span class="check-chevron" aria-hidden="true">›</span></div><div class="check-editor">
+            <div class="ratings" role="radiogroup" aria-label="Rating for {{ $check->question_text_snapshot }}">
+                @foreach ($ratingScheme as $rating)<span class="rating" style="--rating-color:{{ $rating['color'] }}"><input type="radio" id="rating-{{ $check->id }}-{{ $rating['code'] }}" name="rating-{{ $check->id }}" value="{{ $rating['code'] }}" @checked($check->rating_code === $rating['code']) @disabled(! $canEditChecks)><label for="rating-{{ $check->id }}-{{ $rating['code'] }}">{{ $rating['label'] }}</label></span>@endforeach
+            </div>
+            <div class="inputs"><div class="field"><label for="notes-{{ $check->id }}">Notes</label><textarea id="notes-{{ $check->id }}" data-field="notes" maxlength="20000" placeholder="Inspection findings or observations" @disabled(! $canEditChecks)>{{ $check->notes }}</textarea></div><div class="field"><label for="measurements-{{ $check->id }}">Measurements</label><textarea id="measurements-{{ $check->id }}" data-field="measurements" maxlength="5000" placeholder="Enter measurements as text" @disabled(! $canEditChecks)>{{ $check->measurements }}</textarea></div></div>
+            <button class="retry" type="button" data-retry>Retry save</button></div>
+        </article>@endforeach
+    </section>@endforeach
+    <div class="section-pager" aria-label="Checklist section navigation"><button type="button" id="previous-section" disabled>← Previous</button><span class="section-pager__label" id="section-progress">Section <input id="section-number" type="number" min="1" max="{{ $sections->count() }}" value="1" aria-label="Go to section number"> of {{ $sections->count() }}</span><button type="button" id="next-section">Next section →</button></div>
+    <section class="evidence" id="evidence"><h2>Inspection photos</h2><p class="muted">Private photo evidence will be included in the report appendix. Accepted formats: JPEG, PNG and WebP.</p>
+        @if ($inspection->status === 'in_progress')<form class="upload" method="post" enctype="multipart/form-data" action="{{ route('staff.inspections.photos.store', $inspection) }}">@csrf<div><label for="photos">Photo files · up to 20 per upload</label><input id="photos" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required>@error('photos')<div class="error-message">{{ $message }}</div>@enderror</div><div id="photo-caption-fields"></div><button type="submit">Upload photos</button></form>@endif
+        @if ($inspection->photos->isEmpty())<p class="muted">No photos have been added yet.</p>@else @if ($inspection->status === 'in_progress')<form id="photo-order-form" method="post" action="{{ route('staff.inspections.photos.reorder', $inspection) }}" style="display:none">@csrf</form><button class="complete" id="save-photo-order" type="button">Save photo order</button>@endif<div class="gallery" id="photo-gallery">@foreach ($inspection->photos as $photo)<article class="photo" data-photo-id="{{ $photo->id }}"><a href="{{ route('staff.inspection-photos.show', $photo) }}" target="_blank" rel="noopener"><img src="{{ route('staff.inspection-photos.show', $photo) }}" alt="{{ $photo->caption ?: $photo->original_filename }}" loading="lazy"></a>@if ($inspection->status === 'in_progress')<form class="caption-edit" method="post" action="{{ route('staff.inspection-photos.update', $photo) }}">@csrf @method('put')<label for="photo-caption-{{ $photo->id }}">Caption</label><input id="photo-caption-{{ $photo->id }}" name="caption" maxlength="500" value="{{ $photo->caption }}" placeholder="Add photo caption"><button type="submit">Save caption</button></form>@else<p>{{ $photo->caption ?: $photo->original_filename }}</p>@endif @if ($inspection->status === 'in_progress')<div class="photo-actions"><button type="button" data-move="up">↑</button><button type="button" data-move="down">↓</button><form method="post" action="{{ route('staff.inspection-photos.destroy', $photo) }}" onsubmit="return confirm('Remove this inspection photo?')">@csrf @method('delete')<button type="submit">Remove</button></form></div>@endif</article>@endforeach</div>@endif
+        @if (strtolower((string) ($inspection->package_snapshot['code'] ?? '')) === 'gold' && ($inspection->package_snapshot['video_included'] ?? false))<div class="evidence-video"><h2>Inspection video (Gold package)</h2><p class="muted">Add a YouTube link to show the video on the customer report.</p>@if ($inspection->status === 'in_progress')<form class="upload" method="post" action="{{ route('staff.inspections.video.store', $inspection) }}">@csrf @method('put')<div class="field"><label for="youtube_url">YouTube URL</label><input id="youtube_url" type="url" name="youtube_url" value="{{ old('youtube_url', $inspection->video?->source_url) }}" placeholder="https://youtu.be/…" required></div><button type="submit">Save video link</button></form>@error('youtube_url')<div class="error-message">{{ $message }}</div>@enderror @if ($inspection->video)<form method="post" action="{{ route('staff.inspections.video.destroy', $inspection) }}" style="margin-top:10px">@csrf @method('delete')<button class="upload button" type="submit">Remove video link</button></form>@endif @elseif ($inspection->video)<p><a href="{{ $inspection->video->source_url }}" target="_blank" rel="noopener">Saved YouTube video</a></p>@else<p>No video link supplied.</p>@endif</div>@endif
+    </section>
+    @if ($inspection->status === 'in_progress')<form method="post" action="{{ route('staff.inspections.complete', $inspection) }}" id="complete-form">@csrf<button class="complete" type="submit">Complete inspection</button></form>@endif
+      @if (session('report_delivery_failed'))<div class="status error" role="alert">Automatic report delivery needs attention. See the status message above.</div>@endif
+        @if ($inspection->status === 'completed')<div class="report-controls"><section class="evidence"><h2>Generated report versions</h2><p class="muted">Staff can correct a completed inspection. Save a correction to generate a new PDF version and email its secure link. Previous versions remain available.</p>@forelse ($inspection->reports as $report)<div class="report-version-row"><span class="report-version-meta">Version {{ $report->version }} · {{ $report->generated_at->format('d M Y, H:i') }}</span><div class="report-version-actions"><form method="post" action="{{ route('staff.reports.customer', $report) }}" target="_blank">@csrf<button class="report-action report-action-preview" type="submit">Show report</button></form>@if(auth()->user()->role === 'admin')<a class="report-action report-action-preview" href="{{ route('staff.reports.preview', $report) }}" target="_blank" rel="noopener">Preview PDF</a>@endif<form method="post" action="{{ route('staff.reports.revoke', $report) }}" data-revoke-form>@csrf<button class="report-action report-action-revoke" type="submit">Revoke customer link</button></form></div></div>@empty<p class="muted">No report has been generated yet.</p>@endforelse<form method="post" action="{{ route('staff.inspections.reports.generate-version', $inspection) }}" id="new-report-version-form" class="new-report-version-form" style="{{ $reportNeedsRegeneration ? '' : 'display:none' }}" target="_blank">@csrf<button class="report-action report-action-new-version" type="submit">Generate &amp; email new version</button></form></section></div>@endif
+     <div class="footer">@if ($inspection->status === 'completed')Completed inspection points can be corrected by staff; save a correction to generate a new report version.@else Completed inspections are locked. @endif Not Inspected and Not Applicable remain separate from condition scores.</div>
+  </main>
+  @if (session('inspection_completed'))<dialog class="completion-dialog" id="completion-dialog" aria-labelledby="completion-dialog-title" aria-describedby="completion-dialog-description"><div class="completion-dialog__content"><div class="completion-dialog__icon" aria-hidden="true">✓</div><h2 id="completion-dialog-title">Inspection completed</h2><p id="completion-dialog-description">{{ session('inspection_completion_message') }}</p><button class="completion-dialog__close" type="button" data-close-completion>Done</button></div></dialog>@endif
+  @if (session('report_version_generated'))<dialog class="completion-dialog" id="report-version-dialog" aria-labelledby="report-version-dialog-title" aria-describedby="report-version-dialog-description"><div class="completion-dialog__content"><div class="completion-dialog__icon" aria-hidden="true">✓</div><h2 id="report-version-dialog-title">New report version generated</h2><p id="report-version-dialog-description">{{ session('report_version_message') }}</p><button class="completion-dialog__close" type="button" data-close-report-version>Done</button></div></dialog>@endif
+  <dialog class="revoke-dialog" id="revoke-dialog" aria-labelledby="revoke-dialog-title" aria-describedby="revoke-dialog-description">
+     <div class="revoke-dialog__content">
+         <h2 id="revoke-dialog-title">Revoke customer link?</h2>
+         <p id="revoke-dialog-description">Customers will no longer be able to open this report using its current link. The report PDF will remain in staff history.</p>
+         <div class="revoke-dialog__actions"><button class="revoke-dialog__cancel" type="button" data-revoke-cancel>Cancel</button><button class="revoke-dialog__confirm" type="button" data-revoke-confirm>Revoke link</button></div>
+     </div>
+ </dialog>
+ <style>
+    .evidence form.upload { align-items: flex-start; }
+    .evidence-video form.upload { align-items: flex-end; }
+    .evidence-video form.upload .field { margin-bottom: 0; }
+    #photo-caption-fields { flex: 1 0 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; }
+    #photo-caption-fields > div { min-width: 0; }
+    #photo-caption-fields label { overflow-wrap: anywhere; }
+    #photo-caption-fields input { width: 100%; }
+    @media (max-width: 850px) { #photo-caption-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { #photo-caption-fields { grid-template-columns: 1fr; } }
+    #photo-gallery .photo { display: flex; flex-direction: column; min-width: 0; }
+    #photo-gallery .photo > a { display: block; }
+    #photo-gallery .caption-edit { display: grid; align-content: start; gap: 8px; flex: 1; margin: 0; padding: 10px !important; }
+    #photo-gallery .caption-edit label { margin: 0; }
+    #photo-gallery .caption-edit input { width: 100%; min-width: 0; }
+    #photo-gallery .caption-edit button { justify-self: start; }
+    #photo-gallery .photo-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 0 10px 10px; }
+    #photo-gallery .photo-actions form { display: inline-flex; margin: 0; padding: 0 !important; }
+    #photo-gallery .photo-actions button { min-height: 32px; }
+    .section-pager__label { display:flex; align-items:center; gap:6px; }
+    #section-number { width:58px; padding:5px 6px; border:1px solid #c9d1dc; border-radius:6px; background:#fff; color:var(--ink); font:inherit; text-align:center; }
+    #section-number:focus { outline:3px solid #c3a25c55; border-color:#c3a25c; }
+    .report-version-row { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+    .report-version-meta { color:var(--muted); font-weight:650; }
+    .report-version-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+    .report-version-actions form { display:flex; margin:0; }
+    .report-action { display:inline-flex; align-items:center; justify-content:center; min-height:36px; box-sizing:border-box; padding:8px 12px; border:1px solid transparent; border-radius:7px; font:700 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; text-decoration:none; cursor:pointer; }
+    .report-action-preview { background:#182329; border-color:#182329; color:#fff; }
+    .report-action-preview:hover { background:#2b3b42; }
+    .report-action-revoke { background:#fff; border-color:#b64040; color:#a42f36; }
+     .report-action-revoke:hover { background:#fff0f0; }
+     .new-report-version-form { display:flex; margin-top:16px; }
+     .report-action-new-version { background:#f5f0e3; border-color:var(--gold); color:#51401e; }
+     .report-action-new-version:hover { background:#eee5ce; }
+    .report-action-customer { background:#f5f0e3; border-color:#c3a25c; color:#51401e; }
+     #evidence { width:100%; max-width:900px; margin-left:auto; margin-right:auto; }
+     #complete-form { width:100%; max-width:900px; margin:18px auto 0; }
+    .report-controls { width:100%; max-width:900px; margin:0 auto; }
+    .shell > .footer { width:100%; max-width:900px; margin-left:auto; margin-right:auto; }
+     .shell > .summary, #global-status { width:100%; max-width:900px; margin-left:auto; margin-right:auto; }
+     .shell > .message { width:100%; max-width:900px; margin:12px auto; }
+    .breadcrumb { top:0; min-height:48px; padding:8px 18px; display:flex; align-items:center; }
+    .admin-back { top:7px !important; }
+    .revoke-dialog { width:min(440px,calc(100% - 32px)); border:0; border-radius:14px; padding:0; color:var(--ink); box-shadow:0 24px 80px #10182055; }
+    .revoke-dialog::backdrop { background:#10182099; backdrop-filter:blur(2px); }
+    .revoke-dialog__content { padding:24px; }
+    .revoke-dialog h2 { margin:0 0 8px; font-size:20px; }
+    .revoke-dialog p { margin:0; color:var(--muted); }
+    .revoke-dialog__actions { display:flex; justify-content:flex-end; gap:10px; margin-top:24px; }
+    .revoke-dialog__actions button { min-height:40px; padding:9px 14px; border-radius:7px; font:700 13px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; cursor:pointer; }
+    .revoke-dialog__cancel { background:#fff; border:1px solid var(--line); color:var(--ink); }
+     .revoke-dialog__confirm { background:#a42f36; border:1px solid #a42f36; color:#fff; }
+     .completion-dialog { width:min(460px,calc(100% - 32px)); border:0; border-radius:14px; padding:0; color:var(--ink); box-shadow:0 24px 80px #10182055; }
+     .completion-dialog::backdrop { background:#10182099; backdrop-filter:blur(2px); }
+     .completion-dialog__content { padding:28px; text-align:center; }
+     .completion-dialog__icon { display:grid; place-items:center; width:48px; height:48px; margin:0 auto 14px; border-radius:50%; background:#eaf4eb; color:#266743; font-size:26px; font-weight:800; }
+     .completion-dialog h2 { margin:0 0 8px; font-size:21px; }
+     .completion-dialog p { margin:0; color:var(--muted); }
+     .completion-dialog__close { min-width:100px; min-height:40px; margin-top:22px; padding:9px 16px; border:0; border-radius:7px; background:var(--navy); color:#fff; font:700 13px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; cursor:pointer; }
+    @media(max-width:760px) { #evidence { max-width:none; } }
+    @media(max-width:560px) { .report-version-row { align-items:flex-start; flex-direction:column; } .report-version-actions { width:100%; } }
+</style>
+<script>
+(() => {
+    const cards = [...document.querySelectorAll('[data-check-id]')];
+    const globalStatus = document.getElementById('global-status');
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+     const ratings = @json($ratingScheme->pluck('code')->all());
+     const sections = [...document.querySelectorAll('.checklist-section')];
+      const previousSection = document.getElementById('previous-section');
+      const nextSection = document.getElementById('next-section');
+      const sectionProgress = document.getElementById('section-progress');
+      const sectionNumber = document.getElementById('section-number');
+      let currentSection = 0;
+    const updateCount = () => { document.getElementById('answered-count').textContent = cards.filter(card => !!card.querySelector('input[type="radio"]:checked')).length; };
+    const setState = (card, message, state = '') => { const el = card.querySelector('[data-save-state]'); if (el) { el.textContent = message; el.className = `status ${state}`; } globalStatus.textContent = message; };
+    async function save(card) {
+        clearTimeout(card._timer);
+        if (card._busy) { await new Promise(resolve => setTimeout(resolve, 120)); return save(card); }
+        if (!card._dirty) return !card._conflict;
+        card._busy = true; card._dirty = false;
+        setState(card, 'Saving…'); globalStatus.textContent = 'Saving inspection changes…';
+        const payload = {
+            version: Number(card.dataset.version),
+            rating_code: card.querySelector('input[type="radio"]:checked')?.value ?? null,
+            notes: card.querySelector('[data-field="notes"]').value,
+            measurements: card.querySelector('[data-field="measurements"]').value,
+        };
+        let ok = true;
+        try {
+            const response = await fetch(card.dataset.url, {method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':csrf},body:JSON.stringify(payload)});
+            const result = await response.json();
+            if (response.status === 409) {
+                ok = false; card._conflict = true; card._dirty = true; card._serverVersion = result.version;
+                card.querySelector('[data-retry]').textContent='Retry my edits'; card.querySelector('[data-retry]').style.display='inline-block';
+                setState(card, result.message || 'A newer edit exists. Retry to save your current values over it.', 'error'); globalStatus.textContent='A save conflict needs attention.';
+            } else if (!response.ok) {
+                throw new Error(result.message || 'Save failed.');
+            } else {
+                card._conflict = false; card.dataset.version = result.version;
+                setState(card, `Saved at ${new Date(result.saved_at).toLocaleTimeString()}`, 'saved');
+                if (!card._dirty) globalStatus.textContent = 'All recent edits saved.';
+            }
+        } catch (error) {
+            ok = false;
+            card._dirty = true; card.querySelector('[data-retry]').style.display='inline-block';
+            setState(card, 'Could not save. Check your connection and retry.', 'error'); globalStatus.textContent='Connection issue · some edits may be unsaved.';
+        } finally { card._busy = false; }
+        if (ok && card._dirty && !card._conflict) return await save(card);
+        return ok && !card._conflict;
+    }
+     async function showSection(index, scroll = true) { currentSection = Math.max(0, Math.min(index, sections.length - 1)); sections.forEach((section, sectionIndex) => { section.hidden = sectionIndex !== currentSection; }); previousSection.disabled = currentSection === 0; nextSection.disabled = currentSection === sections.length - 1; sectionNumber.value = currentSection + 1; if (scroll) window.scrollTo({top:0, behavior:'smooth'}); }
+      async function moveToSection(index) { const sectionCards = [...sections[currentSection].querySelectorAll('[data-check-id]')]; const saved = await Promise.all(sectionCards.map(card => save(card))); if (!saved.every(Boolean)) { sectionNumber.value = currentSection + 1; globalStatus.textContent = 'Resolve unsaved changes before moving to another section.'; return; } showSection(index); }
+      async function moveSection(direction) { moveToSection(currentSection + direction); }
+      previousSection.addEventListener('click', () => moveSection(-1));
+      nextSection.addEventListener('click', () => moveSection(1));
+      sectionNumber.addEventListener('change', () => { const target = Number(sectionNumber.value); if (Number.isInteger(target) && target >= 1 && target <= sections.length) moveToSection(target - 1); else sectionNumber.value = currentSection + 1; });
+      sectionNumber.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); sectionNumber.blur(); } });
+     const newReportVersionForm=document.getElementById('new-report-version-form');
+     function changed(card) { const selected=card.querySelector('input[type="radio"]:checked'),status=card.querySelector('.check-status'); if(selected&&status){status.classList.remove('unrated');status.innerHTML='<span class="check-status-dot"></span>'+selected.nextElementSibling.textContent;} card._dirty = true; card._conflict = false; card.querySelector('[data-retry]').style.display='none'; setState(card, 'Unsaved changes'); globalStatus.textContent='Unsaved changes · saving…'; if(newReportVersionForm)newReportVersionForm.style.display='flex'; updateCount(); clearTimeout(card._timer); card._timer=setTimeout(()=>save(card),650); }
+    cards.forEach(card => { card._dirty=false; card._busy=false; card._conflict=false; card.querySelectorAll('input,textarea').forEach(input=>input.addEventListener('input',()=>changed(card))); card.querySelectorAll('input[type="radio"]').forEach(input=>input.addEventListener('change',()=>changed(card))); card.querySelector('[data-retry]').addEventListener('click',()=>{if(card._conflict){card.dataset.version=card._serverVersion;card._conflict=false;card._dirty=true;}save(card);}); setState(card, card.dataset.version === '0' ? 'Not saved yet' : 'Saved previously'); });
+    const gallery=document.getElementById('photo-gallery'),orderForm=document.getElementById('photo-order-form'),orderButton=document.getElementById('save-photo-order');
+    if(gallery&&orderForm&&orderButton){gallery.addEventListener('click',event=>{const button=event.target.closest('[data-move]');if(!button)return;const photo=button.closest('.photo'),other=button.dataset.move==='up'?photo.previousElementSibling:photo.nextElementSibling;if(other){if(button.dataset.move==='up')gallery.insertBefore(photo,other);else gallery.insertBefore(other,photo);}});orderButton.addEventListener('click',()=>{orderForm.querySelectorAll('input[name="photo_ids[]"]').forEach(input=>input.remove());gallery.querySelectorAll('.photo').forEach(photo=>{const input=document.createElement('input');input.type='hidden';input.name='photo_ids[]';input.value=photo.dataset.photoId;orderForm.append(input)});HTMLFormElement.prototype.submit.call(orderForm);});}
+     const photoInput=document.getElementById('photos'),captionFields=document.getElementById('photo-caption-fields');
+     if(photoInput&&captionFields){photoInput.addEventListener('change',()=>{captionFields.replaceChildren();[...photoInput.files].forEach((file,index)=>{const wrapper=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input');label.textContent=`Caption for ${file.name}`;input.name=`captions[${index}]`;input.maxLength=500;input.type='text';wrapper.append(label,input);captionFields.append(wrapper);});});}
+      const revokeDialog=document.getElementById('revoke-dialog');
+       const completionDialog=document.getElementById('completion-dialog');
+       if(completionDialog){completionDialog.showModal();completionDialog.querySelector('[data-close-completion]').addEventListener('click',()=>completionDialog.close());}
+       const reportVersionDialog=document.getElementById('report-version-dialog');
+       if(reportVersionDialog){reportVersionDialog.showModal();reportVersionDialog.querySelector('[data-close-report-version]').addEventListener('click',()=>reportVersionDialog.close());}
+     let pendingRevokeForm=null;
+     document.querySelectorAll('[data-revoke-form]').forEach(form=>form.addEventListener('submit',event=>{if(form.dataset.confirmed==='yes'){delete form.dataset.confirmed;return;}event.preventDefault();pendingRevokeForm=form;revokeDialog.showModal();}));
+     document.querySelector('[data-revoke-cancel]').addEventListener('click',()=>{revokeDialog.close();pendingRevokeForm?.querySelector('button[type="submit"]').focus();pendingRevokeForm=null;});
+     document.querySelector('[data-revoke-confirm]').addEventListener('click',()=>{if(!pendingRevokeForm)return;const form=pendingRevokeForm;pendingRevokeForm=null;form.dataset.confirmed='yes';revokeDialog.close();form.requestSubmit();});
+      updateCount();
+     showSection(0, false);
+    window.addEventListener('beforeunload',event=>{if(cards.some(card=>card._dirty||card._busy)){event.preventDefault();event.returnValue='';}});
+    window.addEventListener('online',()=>{cards.filter(card=>card._dirty).forEach(card=>save(card));globalStatus.textContent='Connection restored · retrying pending saves.';});
+    const completeForm=document.getElementById('complete-form');
+    if(completeForm)completeForm.addEventListener('submit',async event=>{const form=event.currentTarget;if(form.dataset.submitting==='yes'){event.preventDefault();return;}event.preventDefault();const button=form.querySelector('button[type="submit"]'),buttonLabel=button.textContent;form.dataset.submitting='yes';button.disabled=true;button.textContent='Saving and completing…';globalStatus.textContent='Saving all changes before completion…';const saved=await Promise.all(cards.map(card=>save(card)));if(saved.every(Boolean)&&cards.every(card=>!card._dirty)){HTMLFormElement.prototype.submit.call(form);}else{delete form.dataset.submitting;button.disabled=false;button.textContent=buttonLabel;globalStatus.textContent='Some changes could not be saved. Resolve them before completing.';window.scrollTo({top:0,behavior:'smooth'});}});
+    if(newReportVersionForm)newReportVersionForm.addEventListener('submit',async event=>{const form=event.currentTarget;if(form.dataset.submitting==='yes'){event.preventDefault();return;}event.preventDefault();const button=form.querySelector('button[type="submit"]'),buttonLabel=button.textContent;form.dataset.submitting='yes';button.disabled=true;button.textContent='Saving and generating…';globalStatus.textContent='Saving all corrections before generating the new report…';const saved=await Promise.all(cards.map(card=>save(card)));if(saved.every(Boolean)&&cards.every(card=>!card._dirty)){HTMLFormElement.prototype.submit.call(form);}else{delete form.dataset.submitting;button.disabled=false;button.textContent=buttonLabel;globalStatus.textContent='Some changes could not be saved. Resolve them before generating the report.';window.scrollTo({top:0,behavior:'smooth'});}});
+     })();
+ </script>
+ <style>
+ .section{background:#fff;border:1px solid #e5e0d4;border-radius:12px;overflow:hidden;margin:22px 0;box-shadow:0 3px 14px #17222907}
+ .section-heading{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:1px solid #e7edf2}
+ .section-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:#edf3fb;color:#1b5bb1;font-size:21px;font-weight:900}.section-icon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+ .section-heading h2{flex:1;font-size:21px;margin:0}.section-count{background:#f1f5fa;color:#536a84;border-radius:18px;padding:8px 13px;font-size:12px;font-weight:800}#section-0 .section-heading{padding:12px 16px;gap:10px}#section-0 .section-icon{width:34px;height:34px}#section-0 .section-icon svg{width:20px;height:20px}#section-0 .section-heading h2{font-size:17px}#section-0 .section-count{padding:6px 10px;font-size:11px}#section-0 .section-table-head{padding:8px 14px}#section-0 .check-header{padding:8px 14px;gap:9px}#section-0 .check-number{width:28px;height:28px}#section-0 .check h3{font-size:14px}#section-0 .check-editor{padding:0 14px 10px 60px}#section-0 .ratings{gap:5px;margin-bottom:8px}#section-0 .rating label{padding:5px 8px;font-size:11px}#section-0 .inputs{gap:8px}#section-0 .field textarea{min-height:52px;padding:7px}
+ .section-table-head{display:grid;grid-template-columns:48px 1fr 150px 22px;gap:12px;padding:11px 22px;background:#f4f7fb;color:#536a84;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+ .check{margin:0;border:0;border-bottom:1px solid #e7edf2;border-radius:0;box-shadow:none;padding:0}.check:last-child{border-bottom:0}
+ .check-editor .ratings{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.check-editor .rating{flex:1 0 0}.check-editor .rating label{text-align:center;white-space:nowrap}
+ .check-header{display:grid;grid-template-columns:48px 1fr 150px 22px;gap:12px;align-items:center;padding:12px 22px}.check-number{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#f1f5fa;color:#253c5c;font-weight:800}.check h3{margin:0;font-size:16px;font-weight:650}.check-status{display:inline-flex;align-items:center;gap:7px;width:max-content;border-radius:20px;padding:7px 11px;background:#e8f3eb;color:#266743;font-size:12px;font-weight:800}.check-status.unrated{background:#f1f3f6;color:#566575}.check-status-dot{width:9px;height:9px;border-radius:50%;background:#159a62}.unrated .check-status-dot{background:#8795a5}.check-chevron{color:#7187a3;font-size:24px}.check-editor{padding:0 22px 16px 82px}
+ @media(max-width:700px){.section-table-head,.check-header{grid-template-columns:38px 1fr 22px;gap:9px;padding-left:14px;padding-right:14px}.section-table-head span:nth-child(3),.check-status{display:none}.check-editor{padding:0 14px 14px 61px}.section-heading{padding:15px}.section-heading h2{font-size:18px}.section-count{padding:7px 9px}}
+ </style><style>.section{max-width:900px;margin-left:auto;margin-right:auto}.section .section-heading{padding:12px 16px;gap:10px}.section .section-icon{width:34px;height:34px}.section .section-icon svg{width:20px;height:20px}.section .section-heading h2{font-size:17px}.section .section-count{padding:6px 10px;font-size:11px}.section .section-table-head{padding:8px 14px}.section .check-header{padding:8px 14px;gap:9px}.section .check-number{width:28px;height:28px}.section .check h3{font-size:14px}.section .check-editor{padding:0 14px 10px 60px}.section .ratings{gap:5px;margin-bottom:8px}.section .rating label{padding:5px 8px;font-size:11px}.section .inputs{gap:8px}.section .field textarea{min-height:52px;padding:7px}@media(max-width:700px){.section{max-width:none}}</style></body></html>
