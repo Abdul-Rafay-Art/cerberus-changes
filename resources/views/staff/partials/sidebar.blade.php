@@ -25,9 +25,11 @@
         font-weight: 850;
         letter-spacing: .14em;
         text-decoration: none;
-        text-align: left;
+        text-align: center;
     }
-    .admin-sidebar__logo { display:block; width:52px; height:52px; margin:0 0 8px; object-fit:contain; border-radius:50%; }
+    .admin-sidebar__logo { display:block; width:52px; height:52px; margin:0 auto 8px; object-fit:contain; border-radius:50%; }
+    .admin-sidebar__brand-name { display:block; }
+    .admin-sidebar__role { display:block; margin-top:2px; color:#d1bb83; font-size:10px; letter-spacing:.08em; }
     .admin-sidebar__links {
         display: flex;
         flex: 1;
@@ -97,7 +99,7 @@
     }
 </style>
 <aside class="admin-sidebar" aria-label="Admin navigation">
-    <a class="admin-sidebar__brand" href="{{ route('staff.bookings.index') }}"><img class="admin-sidebar__logo" src="/images/cerberus-logo.jpg" alt="Cerberus logo">CERBERUS <span style="font-size:10px;color:#d1bb83;letter-spacing:.08em">STAFF</span></a>
+    <a class="admin-sidebar__brand" href="{{ route('staff.bookings.index') }}"><img class="admin-sidebar__logo" src="{{ asset('images/cerberus-logo.jpg') }}" alt="Cerberus logo"><span class="admin-sidebar__brand-name">CERBERUS</span><span class="admin-sidebar__role">{{ auth()->user()->role === 'admin' ? 'ADMIN' : 'STAFF' }}</span></a>
     <nav class="admin-sidebar__links">
         <a class="{{ request()->routeIs('staff.bookings.*') ? 'is-active' : '' }}" href="{{ route('staff.bookings.index') }}">Bookings</a>
         @if(auth()->user()->role === 'admin')

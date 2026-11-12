@@ -113,6 +113,7 @@ class InspectionController
             'inspection' => $inspection,
             'ratingScheme' => collect($inspection->rating_scheme_snapshot),
             'sections' => $inspection->checks->groupBy('section_title_snapshot'),
+            'allChecksRated' => $inspection->checks->every(fn (InspectionCheck $check): bool => filled($check->rating_code)),
             'canEditChecks' => in_array($inspection->status, ['in_progress', 'completed'], true),
             'reportNeedsRegeneration' => $reportNeedsRegeneration,
         ]);
