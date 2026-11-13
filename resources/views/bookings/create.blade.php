@@ -46,8 +46,8 @@
         $vehicleFields = [
             ['registration', 'Vehicle registration', 'text', 'e.g. AB12 CDE', 'car', 'off', 20, true],
             ['mileage_display', 'Mileage', 'text', 'e.g. 64,000 miles', 'gauge', 'off', 80, false],
-            ['make', 'Make', 'text', 'e.g. Toyota', 'car', 'off', 100, false],
-            ['model', 'Model', 'text', 'e.g. Corolla', 'car', 'off', 100, false],
+            ['make', 'Make', 'text', 'e.g. Toyota', 'car', 'off', 100, true],
+            ['model', 'Model', 'text', 'e.g. Corolla', 'car', 'off', 100, true],
             ['year', 'Year', 'number', 'e.g. 2020', 'calendar', 'off', null, false],
             ['location', 'Inspection location', 'text', 'Town or postcode', 'pin', 'off', 2000, false],
         ];

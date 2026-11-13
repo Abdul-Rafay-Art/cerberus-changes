@@ -51,6 +51,7 @@ class InspectionWorkflowTest extends TestCase
             ->assertOk()
             ->assertSee('class="check-status " style="--rating-color:#e1c93f"', false)
             ->assertSee("status.style.setProperty('--rating-color',ratingColor||'#879195')", false)
+            ->assertDontSee('check-chevron', false)
             ->assertSee('Inspector Customer')
             ->assertSee('customer@example.test')
             ->assertSee('07123456789')
